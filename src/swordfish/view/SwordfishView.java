@@ -14,12 +14,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.net.Socket;
+import java.net.ServerSocket;
 import java.net.UnknownHostException;
+import static java.nio.file.AccessMode.READ;
+import static java.nio.file.Files.newInputStream;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -351,12 +357,12 @@ public class SwordfishView extends FrameView {
         tablePanel.setLayout(tablePanelLayout);
         tablePanelLayout.setHorizontalGroup(
             tablePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(buttonPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
+            .add(buttonPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1028, Short.MAX_VALUE)
         );
         tablePanelLayout.setVerticalGroup(
             tablePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(tablePanelLayout.createSequentialGroup()
-                .addContainerGap(430, Short.MAX_VALUE)
+                .addContainerGap(588, Short.MAX_VALUE)
                 .add(buttonPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 40, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -390,8 +396,8 @@ public class SwordfishView extends FrameView {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, chatPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(chatPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, consoleScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 803, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, console, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 803, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, consoleScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, console, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1014, Short.MAX_VALUE))
                 .addContainerGap())
         );
         chatPanelLayout.setVerticalGroup(
@@ -482,11 +488,11 @@ public class SwordfishView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
+            .add(statusPanelSeparator, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 1042, Short.MAX_VALUE)
             .add(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(statusMessageLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 807, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 1018, Short.MAX_VALUE)
                 .add(statusAnimationLabel)
                 .addContainerGap())
         );
@@ -639,12 +645,14 @@ private void consoleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
      * @param port a PORT on the IP that the server lives
      * @param key A Key to check for a valid connection
      */
-    public void connectToServer(String ip, int port, String key) {
+    public void connectToServer(String ip, int port) //, String key)
+        {
         try {
             Socket serverConnection = new Socket(ip, port);
+            //ServerSocket serverConnection = new ServerSocket(port, 0, ip);
             BufferedReader serverBR = new BufferedReader(new InputStreamReader(serverConnection.getInputStream()));
             PrintWriter serverPW = new PrintWriter(serverConnection.getOutputStream(), true);
-            serverPW.println("AUTOCONNECT:" + key);
+            serverPW.println("VERSION:2.0.0:"); // + key);
             serverPW.flush();
             String response = serverBR.readLine();
             StringTokenizer st = new StringTokenizer(response, ":");
@@ -659,7 +667,7 @@ private void consoleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
             } else {
                 connectDialog.setVisible(false);
                 name = st.nextToken();
-                this.key = key;
+                // this.key = key;
                 response = serverBR.readLine();
                 st = new StringTokenizer(response, ":");
                 st.nextToken();
@@ -697,14 +705,32 @@ private void consoleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
     @SuppressWarnings("empty-statement")
     public void connectToRoom(String ip, Integer port) {
         try {
-            roomConnection = new Socket(ip, port);
+            roomConnection = new Socket(ip, port); // port = 1!!!
             BufferedReader roomBR = new BufferedReader(new InputStreamReader(roomConnection.getInputStream()));
             PrintWriter roomPW = new PrintWriter(roomConnection.getOutputStream(), true);
-            roomPW.println("GUIPlayer:" + name + ":" + buyIn + ":" + seatPref);
+            
+            roomPW.println("VERSION:2.0.0"); // + key);
             roomPW.flush();
-            ObjectInputStream roomOIS = new ObjectInputStream(roomConnection.getInputStream());
+            
+            buyIn = 20000;
+            // roomPW.println("GUIPlayer:" + name + ":" + buyIn + ":" + seatPref);
+            // roomPW.flush();
+            // ObjectInputStream roomOIS = new ObjectInputStream(roomConnection.getInputStream());
+            // File file = new File(
+            //        "/home/jarl/Poker-Projects/DeepStack-Leduc/ACPCServer/holdem.nolimit.2p.reverse_blinds.game");
+            
+            // FileInputStream fileSTRM = new FileInputStream (file);
+            
+            
+            FileInputStream fileFIS = new FileInputStream ("/home/jarl/Poker-Projects/DeepStack-Leduc/ACPCServer/holdem.nolimit.2p.reverse_blinds.game");
+            
+            // ObjectInputStream roomOIS = new ObjectInputStream( fileSTRM);
+            
+            ObjectInputStream roomOIS = new ObjectInputStream( fileFIS );
+            // roomOIS = roomPW;
             try {
                 gamedef = (Gamedef) roomOIS.readObject();
+                //gamedef = (Gamedef) roomOIS.read() != -1;
                 if (!gamedef.isNoLimit()) {
                     betsizeSlider.invisible();
                     tablePanel.setHideStack(true);
@@ -946,7 +972,8 @@ private void consoleKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
             JFrame mainFrame = SwordfishApp.getApplication().getMainFrame();
             if (onlineClient) {
                 connectDialog = new keyValidationDialog(mainFrame, this, true);
-            } else {
+            } 
+            else {
                 connectDialog = new SwordfishRoomDialog(mainFrame, this, true);
             }
             connectDialog.setLocationRelativeTo(mainFrame);

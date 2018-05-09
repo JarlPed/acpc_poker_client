@@ -113,8 +113,9 @@ private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event
         key = keyTextField.getText();
         keyTextField.setText("Validating Key...");
         okButton.setEnabled(false);
-        //view.connectToServer("127.0.1.1",9000,key);
-        view.connectToServer("129.128.184.126",9000,key);                                                                         
+        //view.connectToServer("localhost",20001); //,key);
+        //view.connectToServer("129.128.184.126",9000,key);
+        view.connectToRoom("localhost",20001);
     }
     
     /**

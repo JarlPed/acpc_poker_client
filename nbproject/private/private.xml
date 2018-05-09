@@ -6,8 +6,22 @@
             <line>0</line>
         </file>
     </editor-bookmarks>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/compsci/brule9/cshome/jdavidso/poker_dev/test/poker_study_gui/Swordfish/src/swordfish/view/SwordfishView.java</file>
-        <file>file:/compsci/brule9/cshome/jdavidso/poker_dev/test/poker_study_gui/Swordfish/src/swordfish/view/keyValidationDialog.java</file>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0">
+        <file>
+            <url>src/swordfish/view/SwordfishView.java</url>
+            <bookmark id="0">
+                <name/>
+                <line>0</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/jarl/Poker-Projects/acpc_poker_client/src/swordfish/view/SwordfishView.java</file>
+            <file>file:/home/jarl/Poker-Projects/acpc_poker_client/src/swordfish/view/keyValidationDialog.java</file>
+            <file>file:/home/jarl/Poker-Projects/acpc_poker_client/src/swordfish/view/resources/serverList.xml</file>
+            <file>file:/home/jarl/Poker-Projects/acpc_poker_client/src/swordfish/view/SwordfishApp.java</file>
+        </group>
     </open-files>
 </project-private>
